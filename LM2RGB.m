@@ -21,8 +21,8 @@ for i=1:50
     R = rescale(LM,0,1);
     
     RGB(:,:,1) = R;
-    RGB(:,:,2) = R;
-    RGB(:,:,3) = R;
+%     RGB(:,:,2) = R;
+%     RGB(:,:,3) = R;
     
     % Create png file
     fileName = ['LM_64_120_',num2str(i),'.png'];
