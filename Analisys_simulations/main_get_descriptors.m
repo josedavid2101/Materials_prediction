@@ -16,11 +16,12 @@ for i=1:1
     %% Get descriptors
 
     no_grains = get_no_grains(LM_continue.Label_matrices); % Number of grains at each time step
+%     tic
+%     grain_size = get_grain_size(LM_continue.Label_matrices); % Average grain size at each time step
+%     toc
     tic
-    grain_size = get_grain_size(LM_continue.Label_matrices); % Average grain size at each time step
-    toc
     no_tjs = get_no_tjs(LM_continue.Label_matrices); % Number of triple junctions at each time step  
-
+    toc
     
     %% Save data
     LM = ['LM_10000_800_426_',num2str(i),'.mat'];
@@ -65,4 +66,32 @@ function [grain_size] = get_grain_size(LMs)
 
     end
 
+end
+
+function no_tjs = get_no_tjs(LMs)
+    no_tjs = zeros(length(LMs),1);
+    for ii=1:length(LMs)
+
+        LM = LMs{ii,1};
+        no_tj = 0; %initialize the tj counter
+        
+        m = [LM LM(:,1)];
+    
+        lm_first_row = [LM(1,:) LM(1,1)];
+    
+        LM_ext = [m; lm_first_row];
+    
+        for i=1:length(LM_ext)-1 % loop over m
+            for j=1:length(LM_ext)-1
+                
+                m = LM_ext(j:j+1,i:i+1); %Obtain 2x2 sample
+                ids = unique(m); %get ids of the sample
+                if length(ids)>2 % condition for a tj
+                    no_tj = no_tj + 1;
+                end
+                
+            end
+        end
+        no_tjs(ii,1) = no_tj;
+    end
 end
